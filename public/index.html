@@ -1,0 +1,318 @@
+<!doctype html>
+<!--
+  Material Design Lite
+  Copyright 2015 Google Inc. All rights reserved.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="A front-end template that helps you build fast, modern mobile web apps.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>Autos PWA</title>
+   <!-- Ícono para la página web. Debe ponerse en la raíz de la página. -->
+    <link rel="icon" sizes="32x32" href="favicon.ico">
+    <script>
+      /* invoca a registraServiceWorker instalar la aplicación en el caché del
+       * navegador. No se espera a que termine el registro. */
+      registraServiceWorker();
+      /** Registra un service worker para instalar la aplicación en el
+       * caché del navegador. La palabra reservada async indica que no espera
+       * a que termine y libera el registro de activación que lo llamó. */
+      async function registraServiceWorker() {
+        if ("serviceWorker" in navigator) {
+          try {
+            /* Registra el service worker y espera que termine. El service
+             * worker debe estar en la carpeta public. La palabra await indica
+             * que espera a que termine y solo puede usarse en una función
+             * async. */
+            const registro = await navigator.serviceWorker.register("sw.js");
+            // Registro correcto y se muestra en la consola.
+            console.log("Service Worker registrado.");
+            console.log(registro);
+          } catch (e) {
+            // Hubo un error en el registro.
+            muestraError(e);
+          }
+        }
+      }
+      /** Procesa una excepción y muestra un mensaje de error.
+       * @param {Error} e descripción del error. */
+      function muestraError(e) {
+        console.log(e);
+        alert(e.message);
+      }
+    </script>
+
+    
+    
+
+    <!-- Color de la barra de navegación de Chrome en dispositivos móviles. -->
+    <meta name="theme-color" content="#ffcb2d">
+
+    <!-- Configuración de la PWA: Chrome y Edge. -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Configuración para Web Clip en Safari. -->
+    <meta name="apple-mobile-web-app-title" content="dmppwa">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="apple-touch-icon" href="img/icono-2048.png">
+    <link rel="apple-touch-icon" sizes="256x256" href="img/icono-256.png">
+    <link rel="apple-touch-icon" sizes="1024x1024" href="img/icono-1024.png">
+    <link rel="apple-touch-icon" sizes="2048x2048" href="img/icono-2048.png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.teal-red.min.css">
+    
+
+    <!-- SEO: If your mobile URL is different from the desktop URL, add a canonical link to the desktop page https://developers.google.com/webmasters/smartphone-sites/feature-phones -->
+    <!--
+    <link rel="canonical" href="http://www.example.com/">
+    -->
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.teal-red.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <script type="module" src="cmp/mi-footer.js"></script>
+<!-- Carga el núcleo de Firebase. Actualiza los números de versión cuando
+    sea necesario. Hemos quitado el atributo defer que aparecía originalmente.
+    -->
+    <script src="/__/firebase/7.14.6/firebase-app.js"></script>
+    <!-- Solo incluye las características de Firebase que necesites.s -->
+    <script src="/__/firebase/7.14.6/firebase-auth.js"></script>
+    <script src="/__/firebase/7.14.6/firebase-firestore.js"></script>
+    <script src="/__/firebase/7.14.6/firebase-storage.js"></script>
+    <!-- Carga la configuración de tu proyecto en el servidor de Firebase. -->
+    <script src="/__/firebase/init.js"></script>
+
+    <style>
+    #view-source {
+      position: fixed;
+      display: block;
+      right: 0;
+      bottom: 0;
+      margin-right: 40px;
+      margin-bottom: 40px;
+      z-index: 900;
+    }
+    </style>
+   
+  </head>
+  
+  <body>
+    <div class="demo-layout mdl-layout mdl-layout--fixed-header mdl-js-layout mdl-color--grey-100">
+      <header class="demo-header mdl-layout__header mdl-layout__header--scroll mdl-color--grey-100 mdl-color-text--grey-800">
+        <div class="mdl-layout__header-row">
+          <span class="mdl-layout-title">Autos </span>
+          <div class="mdl-layout-spacer"></div>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
+            <form action="javascript:guarda()">
+
+              <button id="agregar" type="button" id="button"
+                onclick="alta();">
+              <span class="material-icons" id="icon">
+                 plus_one
+              </span>
+            </button>
+            <button type="submit">
+              <span class="material-icons" id="icon">
+                save
+              </span>
+            </button>
+            <button id="eliminar" type="button"
+              onclick="elimina();">
+                <span class="material-icons" id="icon">
+                  delete
+                </span>
+              </button>
+          </div>
+        </div>
+      </header>
+      <div class="demo-ribbon"></div>
+      <main class="demo-main mdl-layout__content">
+        <div class="demo-container mdl-grid">
+          <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+          <div class="demo-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--8-col">
+            <div class="demo-crumbs mdl-color-text--grey-500">
+              Ejemplo de BD 
+            </div>
+            <h4><center> Autos <center> </h4>
+              <!-- 
+              INICIO DE TODO
+              -->
+             
+              <p class="campo">
+                <input id=nombre type=textt required>
+                <label for=nombre>Nombre del Auto</label>
+              </p>
+              <br>
+              <p class="campo">
+                <input id=motor type=text required>
+                <label for=motor>Motor (V12 o TwTurbo)</label>
+              </p>
+              <br>
+              
+              <ul id="lista">
+                <li><progress max="100">Cargando…</progress></li>
+                 </ul>
+
+                 <br>
+                 
+            </form>
+
+            <!-- PROGRAMADA PAPAW -->
+
+            <script>
+      /** Id del objeto seleccionado en la lista. */
+      let id = "";
+      const firestore = firebase.firestore();
+      muestraLista();
+      alta();
+      function muestraLista() {
+        /* Pide todos los registros de la colección "PASATIEMPO" ordenados por
+         * el campo "PAS_NOMBRE" de forma ascendente. */
+        firestore.collection("AUTOS").orderBy("AUTO_NOMBRE").onSnapshot(
+          documentos => {
+            let inner = "";
+            documentos.forEach(doc =>
+              inner += /* html */
+              `
+              <li >
+              <button type=button onclick="muestra('${cod(doc.id)}')">
+                <div class="campo principal"> ${cod(doc.data().AUTO_NOMBRE)} </span>
+                <div class="campo"> ${cod(doc.data().AUTO_MOTOR)}</span>
+              </button>
+                  </span>
+                </li>
+              `);
+            lista.innerHTML = inner;
+          },
+          e => {
+            procesaError(e);
+            muestraLista();
+          }
+        );
+      }
+      /** Prepara la forma para capturar un pasatiempo nuevo. */
+      function alta() {
+        agregar.disabled = true; // Deshabilita el botón "agregar".
+        eliminar.disabled = true; // Deshabilita el botón "eliminar".
+        id = ""; // Pone en blanco el id, porque todavía no agregamos a la BD.
+        nombre.value = ""; // Pone en blanco los datos porque todavía no hay.
+        motor.value= "";
+      }
+      /** Prepara la forma para modificar el documento que corresponde al
+       * id seleccionado en el listado.
+       * @param {string} idSel id del documento seleccionado en el listado. */
+      async function muestra(idSel) {
+        try {
+          agregar.disabled = false; // Habilita el botón "agregar".
+          eliminar.disabled = false; // Habilita el botón "eliminar".
+          /* Recupera el documento con el id seleccionado en la colección
+           * "PASATIEMPO". */
+          let doc = await firestore.collection("AUTOS").doc(idSel).get();
+          if (doc.exists) {
+            id = doc.id;
+            let data = doc.data();
+            nombre.value = data.AUTO_NOMBRE || "";
+            motor.value = data.AUTO_MOTOR || "";
+          } else {
+            alert("El auto selecionado no está registrado.");
+            alta();
+          }
+        } catch (e) {
+          procesaError(e);
+        }
+      }
+      async function guarda() {
+        try {
+          const modelo = {
+            AUTO_NOMBRE: nombre.value.trim(),
+            AUTO_MOTOR: motor.value.trim()
+          };
+          if (id) {
+            /* Modifica el modelo en la base de datos en base al id y espera a
+             * que termine. */
+            await firestore.collection("AUTOS").doc(id).set(modelo);
+          } else {
+            /* Agrega el modelo a la base de datos, genera automáticamente el
+             * id y espera a que termine. */
+            await firestore.collection("AUTOS").add(modelo);
+          }
+          alta();
+        } catch (e) {
+          procesaError(e);
+        }
+      }
+      async function elimina() {
+        try {
+          /* Elimina el documento en la base de datos usando el id y espera a
+           * que termine. */
+          await firestore.collection("AUTOS").doc(id).delete();
+          alta();
+        } catch (e) {
+          procesaError(e);
+        }
+      }
+      function procesaError(e) {
+        console.log(e);
+        alert(e.message);
+      }
+      /** Codifica la información textual para que no inyecte código HTML.
+       * @param {any} valor información a codificar.
+       * @returns {string} el texto transformado. */
+      function cod(valor) {
+        return (valor || "").toString()
+          .replace(/[<>"']/g,
+            /** @param {string} letra */
+            letra => {
+              switch (letra) {
+                case "<": return "&lt;";
+                case ">": return "&gt;";
+                case '"': return "&quot;";
+                case "'": return "&#039;";
+                default: return letra;
+              }
+            });
+      }
+    </script>
+    <!-- Salida 
+    <output id="mensaje" id="button">
+      <progress max="100" id="barra">Cargando Firebase SDK&hellip;</progress>
+    </output>
+-->
+
+          </div>
+        </div>
+        <footer class="demo-footer mdl-mini-footer">
+          
+          <div class="mdl-mini-footer--left-section">
+            <ul class="mdl-mini-footer--link-list">
+              <mi-footer></mi-footer>
+             
+
+            </ul>
+          </div>
+        </footer>
+                  
+      </main>></script>
+  </body>
+</div>
+
+</html>
+
+    
