@@ -2,13 +2,10 @@
 <!--
   Material Design Lite
   Copyright 2015 Google Inc. All rights reserved.
-
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
   You may obtain a copy of the License at
-
       https://www.apache.org/licenses/LICENSE-2.0
-
   Unless required by applicable law or agreed to in writing, software
   distributed under the License is distributed on an "AS IS" BASIS,
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -122,12 +119,11 @@
           <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
             <form action="javascript:guarda()">
 
-              <button id="agregar" type="button" id="button"
-                onclick="alta();">
-              <span class="material-icons" id="icon">
-                 plus_one
-              </span>
-            </button>
+             <!-- <button id="agregar" type="button" id="button"
+              onclick="alta();">
+            <span class="material-icons" id="icon">
+               plus_one -->
+            </span> 
             <button type="submit">
               <span class="material-icons" id="icon">
                 save
@@ -161,8 +157,8 @@
               </p>
               <br>
               <p class="campo">
-                <input id=motor type=text required>
-                <label for=motor>Motor (V12 o TwTurbo)</label>
+                <input id=color type=text required>
+                <label for=color>Color</label>
               </p>
               <br>
               
@@ -181,7 +177,7 @@
       let id = "";
       const firestore = firebase.firestore();
       muestraLista();
-      alta();
+      //alta();
       function muestraLista() {
         /* Pide todos los registros de la colección "PASATIEMPO" ordenados por
          * el campo "PAS_NOMBRE" de forma ascendente. */
@@ -194,7 +190,7 @@
               <li >
               <button type=button onclick="muestra('${cod(doc.id)}')">
                 <div class="campo principal"> ${cod(doc.data().AUTO_NOMBRE)} </span>
-                <div class="campo"> ${cod(doc.data().AUTO_MOTOR)}</span>
+                <div class="campo"> ${cod(doc.data().AUTO_COLOR)}</span>
               </button>
                   </span>
                 </li>
@@ -208,19 +204,20 @@
         );
       }
       /** Prepara la forma para capturar un pasatiempo nuevo. */
-      function alta() {
+      /*-----------------------------------------------------*/
+      /*function alta() {
         agregar.disabled = true; // Deshabilita el botón "agregar".
         eliminar.disabled = true; // Deshabilita el botón "eliminar".
         id = ""; // Pone en blanco el id, porque todavía no agregamos a la BD.
         nombre.value = ""; // Pone en blanco los datos porque todavía no hay.
-        motor.value= "";
-      }
+        color.value= "";
+      }/*
       /** Prepara la forma para modificar el documento que corresponde al
        * id seleccionado en el listado.
        * @param {string} idSel id del documento seleccionado en el listado. */
       async function muestra(idSel) {
         try {
-          agregar.disabled = false; // Habilita el botón "agregar".
+          //agregar.disabled = false; // Habilita el botón "agregar".
           eliminar.disabled = false; // Habilita el botón "eliminar".
           /* Recupera el documento con el id seleccionado en la colección
            * "PASATIEMPO". */
@@ -229,10 +226,10 @@
             id = doc.id;
             let data = doc.data();
             nombre.value = data.AUTO_NOMBRE || "";
-            motor.value = data.AUTO_MOTOR || "";
+            color.value = data.AUTO_COLOR || "";
           } else {
             alert("El auto selecionado no está registrado.");
-            alta();
+            //alta();
           }
         } catch (e) {
           procesaError(e);
@@ -242,7 +239,7 @@
         try {
           const modelo = {
             AUTO_NOMBRE: nombre.value.trim(),
-            AUTO_MOTOR: motor.value.trim()
+            AUTO_COLOR: color.value.trim()
           };
           if (id) {
             /* Modifica el modelo en la base de datos en base al id y espera a
@@ -253,7 +250,10 @@
              * id y espera a que termine. */
             await firestore.collection("AUTOS").add(modelo);
           }
-          alta();
+          //alta();
+          id = ""; // Pone en blanco el id, porque todavía no agregamos a la BD.
+        nombre.value = ""; // Pone en blanco los datos porque todavía no hay.
+        color.value= "";
         } catch (e) {
           procesaError(e);
         }
@@ -263,7 +263,10 @@
           /* Elimina el documento en la base de datos usando el id y espera a
            * que termine. */
           await firestore.collection("AUTOS").doc(id).delete();
-          alta();
+          //alta();
+        id = ""; // Pone en blanco el id, porque todavía no agregamos a la BD.
+        nombre.value = ""; // Pone en blanco los datos porque todavía no hay.
+        color.value= "";
         } catch (e) {
           procesaError(e);
         }
@@ -314,5 +317,3 @@
 </div>
 
 </html>
-
-    
